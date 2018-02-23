@@ -1,0 +1,503 @@
+<hr>
+<b>WIVE FIRMWARE IS FREE FOR THE NON-COMMERCIAL USE ONLY.</b>
+<br>
+<b>Conditions of commercial use non GPL (or other not viral license) components are discussed individually.</b>
+<hr>
+<b>News and changes in Russian:</b><br>
+<a href="http://wive-ng.sf.net">wive-ng.sf.net - development opensource routers firmware</a><br>
+<br>
+<b>Bug report please send sfstudio[at]mail.ru</b>
+<hr>
+<b>Release tree changes:</b><br>
+<b>4.5.x</b><br>
+1) build_system: add targets for rt3352+usb and rt5350 wo usb devices.<br>
+2) webUI: add statistic for second radio module in asus N56.<br>
+3) configs: disable green ap support (2.7.1.6 driver fix reinit issue).<br>
+4) defaults: disable AP keepalive mechanism and decrease idle time (fix drop packets issue if rtl8723as connected).<br>
+5) defaults: enable ralink burst mode per default.<br>
+6) wifi: rt3352: use v11 adaptives for internal LNA.<br>
+7) libcurl: up to 7.33.0 version.<br>
+8) xl2tpd: sync with upstream Oct 25, 2013.<br>
+9) kernel: move to 2.7.1.6 driver, support rt3xxx,rt5350,mt762x chips.<br>
+10) kernel: wifi driver 2.7.1.6: fix GreenAP for RT3052/3350 and RT3883/3662.<br>
+11) kernel: netfilter: xt_tcpmss: get mtu only if clamp-mss-to-pmtu is specified.<br>
+12) kernel: netfilter: xt_tcpmss: drop newminmss argument of tcpmss_mangle_packet function.<br>
+13) kernel: tcp: don't check mtu probe completion in the loop.<br>
+14) kernel: tcp: mtuprobe: Cleanup send queue check (no need to loop).<br>
+15) kernel: icmpv6: treat dest unreachable codes 5 and 6 as EACCES, not EPROTO.<br>
+16) kernel: ipv6: allow the MTU of ipip6 tunnel to be set below 1280.<br>
+17) kernel: ipv6: Use 1280 as min MTU for ipv6 forwarding.<br>
+18) kernel: ipv6: update MSS even if MTU is unchanged.<br>
+19) kernel: ipv6: restore IPv6 when MTU is big enough.<br>
+20) kernel: ipv6: don't update ADVMSS on routes where the MTU is not also updated.<br>
+21) kernel: ipv6: ip6_fragment() should check CHECKSUM_PARTIAL.<br>
+22) kenrel: ipv6: ignore looped-back NA while dad is running.<br>
+23) kernel: ipv4 igmp: use in_dev_put in timer handlers instead of __in_dev_put.<br>
+24) kernel: ipv4: cap ADVMSS metric in the FIB rather than the routing cache.<br>
+25) kernel: inet: fix inet_bind_bucket_for_each.<br>
+26) kernel: tcp: Handle CHECKSUM_PARTIAL for SYNACK packets.<br>
+27) kernel: wifi_drivers: enable enchanged statistic for all devices.<br>
+28) kernel: wifi_drivers: disable draft3 extensions(unused).<br>
+29) kernel: fix potentional skb_under_panic oops in neigh_resolve_output.<br>
+30) kernel: netfilter: conntrack: check for NEXTHDR_NONE before header sanity checking.<br>
+31) kernel: udp: fix length check.<br>
+32) nvram: make iNIC (rt3090) config automatic from nvram with different parametrs WirelessModeINIC/ChannelINIC.<br>
+33) clean: remove very old unused nvram_daemon and userspace nvram mode from libnvram.<br>
+34) config: intrusion detection system (IDS) enable by default.<br>
+35) webui: add enable/disable intrusion detection system (IDS).<br>
+
+<br>
+<b>4.6.x</b><br>
+1) radvd: up to 1.9.7 version.<br>
+2) xupnpd: update xupnpd to 1.032 version (392 svn revision).<br>
+3) usb_modem: update usb-modeswitch-data package to 2013-11-13 version.<br>
+4) init.d: allow l2tp clients connect to local udpxy server.<br>
+5) init.d: allow send/recive multicast over vpn if proxyarp enable.<br>
+6) libusb/usb_modeswitch: back to 0.1.2/1.2.7 version with new database (need update future).<br>
+7) dnsmasq: up to 2.68 version.<br>
+8) dropbear: up to 2013.62 version.<br>
+9) xupnpd: update lua to 5.2.3 version.<br>
+10) miniupnpd: update to 1.8.20131216 version.<br>
+11) kernel: wifi driver: temp back to 2.5.0.4 AP/STA driver for RT305x/RT3350.<br>
+12) kernel: wifi driver: fix power select in 2.5.0.4 AP driver.<br>
+13) kernel: wifi driver: consolidate config options 2.5/2.7 drivers.<br>
+14) kernel: tcp: reset reordering est. selectively on timeout.<br>
+15) kernel: netfilter: nf_ct_h323: fix bug in rtcp natting.<br>
+16) kernel: tcp: undo on DSACK during recovery.<br>
+17) kernel: ipv4: Fix IP timestamp option (IPOPT_TS_PRESPEC) handling in ip_options_echo().<br>
+18) kenrel: af_unix: implement socket filter.<br>
+19) kernel: network: tcp_connect should return certain errors up the stack.<br>
+20) kernel: net: avoid race between network down and sysfs.<br>
+21) kernel: af_packet: check return of dev_set_promiscuity/allmulti.<br>
+22) kernel: net: Avoid copying writable clones in tunnel drivers.<br>
+23) kernel: ipv6: sit: Fix locking issues in PRL management.<br>
+24) kernel: ipv6: sit: Disallow 0.0.0.0 in PRL and Flush PRL if given for DEL.<br>
+25) kernel: net: remove link_watch delay for up even when we're down.<br>
+26) kernel: net: link_watch: Always schedule urgent events.<br>
+27) kernel: net: zero length write() on socket should not simply return 0.<br>
+28) kernel: net: pppoe: Check packet length on all receive paths.<br>
+29) kernel: net: rework recvmsg handler msg_name and msg_namelen logic.<br>
+30) kernel: usb: add IAD support to usbfs and sysfs.<br>
+31) kernel: usb: add "descriptors" binary sysfs attribute.<br>
+32) kernel: ipv6: call udp_push_pending_frames when uncorking a socket with AF_INET pending data.<br>
+33) kernel: ipv6: fix leaking uninitialized port number of offender sockaddr.<br>
+34) kernel: ipv6: netfilter: move POSTROUTING invocation before fragmentation.<br>
+35) kernel: wifi_drivers: full disable apqload support.<br>
+36) kernel: inet: prevent leakage of uninitialized memory to user in recv syscalls.<br>
+37) kernel: ipv6 route: Fix route lifetime in netlink message.<br>
+38) kernel: ipv4: fix DO and PROBE pmtu mode regarding local fragmentation with UFO/CORK.<br>
+39) kernel: ipv4: remove extra argument from arp_ignore.<br>
+40) kernel: arp: fix arp reply when sender ip 0.<br>
+
+<br>
+<b>4.7.x</b><br>
+1) busybox: update to 1.22.0 version.<br>
+2) buxybox: fix lsusb work.<br>
+3) pppd: uptade to current 2.4.6-2Jan2014 version.<br>
+4) udpxy: add ts_demuxer support for more compat with some buggy players (wdtv/avatar3/some androids players).<br>
+5) udpxy: import last fixes from upstream git (github.com/pcherenkov/udpxy).<br>
+6) xl2tpd: check write return code on control socket (Jan 03, 2014 commit).<br>
+7) pppd: use different option files for l2tp server/client mode.<br>
+8) init.d: iptables: fix work l2tp server if pptp client started.<br>
+9) init.d: ssh: add RemoteSSHPort variable for select ssh port(need add in webui).<br>
+10) l2tp server ip-up: do not need restart iptables.<br>
+11) xl2tpd: update to 1.3.6 (Jan 15, 2014) version.<br>
+12) transmission: update to 2.82 version.<br>
+13) libupnp: update to 1.6.19.<br>
+14) radvd: update to 1.9.8 version.<br>
+15) ntfs-3g: up to 2013.1.13 version.<br>
+16) miniupnpd: update to 1.8.20140203 version.<br>
+17) ppp: policer: decrease max limit and increase range for down limit, set different limits for 3x50/3x52/3883 devices.<br>
+18) init.d: refactoring start dependency for more log boot process to sysylog/klog.<br>
+19) init.d: goahead: move call rescan usb for hutplug at end off load webui.<br>
+20) init.d: tune kernel by sysctl more early (after checkconf).<br>
+21) toolchain: binutils: update to 2.24.<br>
+22) kernel: ip6_tunnel: ensure to always have a link local address(RFC4862 and RFC4291 more compat).<br>
+23) kernel: fastroute: small speedup and more readable code.<br>
+24) kernel: fix lockup related to stop_machine being stuck in __do_softirq.<br>
+25) kernel: option: backport support modems from 3.13 kernel tree.<br>
+26) kernel: reenable gcc optimization due CPU arch.<br>
+27) kernel: driver core: make uevent-environment available in uevent-file.<br>
+28) kernel: usbnet: fix status interrupt urb handling.<br>
+29) kernel: ipv6: fix fragment process in ip output finish.<br>
+30) kernel: ipv6: don't install anycast address for /128 addresses on routers.<br>
+31) kernel: ipv6: remove old conditions on flow label sharing.<br>
+32) kernel: ipv6: do not erase dst address with flow label destination.<br>
+33) kernel: ipv6: user better hash for addrconf.<br>
+34) kernel: net: link_watch: Eliminate potential delay on wrap-around.<br>
+35) kernel: tcp: delete redundant calls of tcp_mtup_init().<br>
+36) kernel: tcp: remove redundant code in __tcp_retransmit_skb().<br>
+37) kernel: tcp: tcp_transmit_skb() optimizations.<br>
+38) kernel: tcp: remove Appropriate Byte Count support.<br>
+39) kernel: tcp: avoid a possible divide by zero.<br>
+40) kernel: tcp: Remove unrequired operations in tcp_push().<br>
+41) kernel: tcp: cleanup ca_state mess in tcp_timer.<br>
+42) kernel: tcp: don't clear hints when tcp_fragmenting.<br>
+43) kernel: tcp: fix length used for checksum in a reset.<br>
+44) kernel: ipv4: arp: update neighbour address when a gratuitous arp is received and arp_accept is set.<br>
+45) kernel: mips: allow use generic clock events and high res timers, and set by default.<br>
+46) kernel: pppoe: fix some very old bugs in driver code.<br>
+47) kernel: ppp: slight optimization of addr compare.<br>
+48) kernel: fix w/r mem buf size set.<br>
+49) kernel: use fair group CPU scheduler by default.<br>
+50) kernel: remove bridge fastpath code (not need now, very low speedup bridge operation and make transit slowly).<br>
+51) kernel: refactoring code nat fastpath and route fastpath.<br>
+52) kernel: speedup software network operation ~2-5% depended of case.<br>
+53) kernel: fastroute/fastnat: consolidate code check allowed for software offload process (one check for fastroute/nat cases).<br>
+54) kernel: hw_nat: unifi udp checksumm workaround code and add skip tranzit ipsec and l2tp.<br>
+55) kernel: bridge: remove forward control dead code.<br>
+56) kernel: af_unix: fix 'poll for write'/ connected DGRAM sockets.<br>
+57) kernel: tcp: kernel: cubic optimization.<br>
+58) kernel: small gcc optimize flag tune.<br>
+59) kernel: net: fix a race in sock_queue_err_skb().<br>
+60) goahead: fix route apply logic (call full reconfigure network at apply).<br>
+61) goahead: fix system log read and add access denied attemps.<br>
+62) goahead: fix cpu load calculations.<br>
+63) goahead: add remote ssh port to WebUi.<br>
+
+<br>
+<b>4.8.x</b><br>
+1) net: fix 'ip rule' iif/oif device rename.<br>
+2) dropbear: up to 2014.63 version.<br>
+3) radvd: up to 1.10.0 version.<br>
+4) miniupnpd: up to 1.8.20140422 version.<br>
+5) p910nd: up to 0.97 version.<br>
+6) usb-modeswitch-data: up to 20140129 version.<br>
+7) xupnpd: up to 398 revision.<br>
+8) dnsmasq: up to 2.70 version.<br>
+9) init.d: add miniupnp pcp chain.<br>
+10) usb-modeswitch: update data to 20140327 version.<br>
+11) webui: add support mppe for l2tp server.<br>
+12) webui: fix mtu/mru change for l2tp server.<br>
+13) kernel: net: unix socket code abuses csum_partial.<br>
+14) kernel: ipv6: ip6_forward: perform skb->pkt_type check at the beginning.<br>
+15) kernel: vlan: slight optimization for skb_do_rcv().<br>
+16) kernel: tcp: do not leak non zero tstamp in output packets.<br>
+17) kernel: net: sched: use no more than one page in struct fw_head.<br>
+18) kernel: udp: fix a race in encap_rcv handling.<br>
+19) kernel: net: unix: non blocking recvmsg() should not return -EINTR.<br>
+20) kernel: jiffies: Avoid undefined behavior from signed overflow.<br>
+21) kernel: net: optimize csum_replace2().<br>
+22) kernel: ppp_mppe: backport fixes from upstream.<br>
+23) kernel: tcp: use zero-window when free_space is low.<br>
+24) kernel: tcp: undo spurious timeout after SACK reneging.<br>
+25) kernel: xfrm: Allow packet drops during larval state resolution.<br>
+26) kernel: netfilter: nf_conntrack: use hlists for conntrack hash.<br>
+27) kernel: netfilter: nf_conntrack: early_drop improvement.<br>
+28) kernel: ipv4: return valid RTA_IIF on ip route get.<br>
+29) kernel: hw_nat: fix error path in alloc memory for hash.<br>
+
+<br>
+<b>4.9.x</b><br>
+1) toolchain: fix wrong optimization with -O2 4.7/4.8 version gcc regression.<br>
+2) toolchain: gcc up to 4.8.3.<br>
+3) backport fixes from 4.2.0.0 SDK (hw_nat/skbuff/tso/etc..).<br>
+4) dropbear: reconfigure for support portforward (disable by defaultd in init.d).<br>
+5) defaults: enable WmmCapable (temp disabled some times ago).<br>
+6) webui: add WMM capable.<br>
+7) igmpproxy: fix periodic timer on broken system time.<br>
+8) dnsmasq: update to 2.71 version.<br>
+9) libcurl: up to 7.37.0 version.<br>
+10) miniupnpd: up to 1.8.20140523 version.<br>
+11) busybox: dhcpc: workaround for ugly ISP (as Moscow QWERTY) on recived mtu = 576 bytes instead 1500 for IPOE.<br>
+12) busybox: udhcpc source IP rebind patch.<br>
+13) busybox: udhcpc: make hostname sanitization optional. Closes 3979.<br>
+14) xupnpd: up to 399 revision.<br>
+15) radvd: up to 1.14.0 version.<br>
+16) openssl: up to 0.9.8za.<br>
+17) udpxy: add mreq support and not build fileinput support.<br>
+18) udpxy: add workaround for client fake freez situations.<br>
+19) udpxy: sync with upstream git 16 Jun 2014.<br>
+20) udpxy: allways disable ipv6 support (not real devices used ipv6 for streaming).<br>
+21) apps: more apps build with gc-sections (802.1x,dropbear,inadyn,iptables,lldt,miniupnpd,radvd,wireless_tool,xupnpd).<br>
+22) lltd: fix physical medium type set for wireless.<br>
+23) init.d: fix work wins for local l2tp server clients.<br>
+24) init.d: fix work local services (upnp,radvd,etc) if vpn client on and dgw not in vpn.<br>
+25) dropbear: use multicall build for summary decrease size.<br>
+26) kernel: more spi flash support.<br>
+27) kernel: base MT7620 support.<br>
+28) kernel: netfilter: nf_conntrack: flush net_gre->keymap_list only from gre helper.<br>
+29) kernel: ipv6: don't create clones of host routes.<br>
+30) kernel: usb serial(option/cdc_acm/cdc_ether): add some modems support.<br>
+31) kernel: mppe: fix stop work after recive serios reordered packets.<br>
+32) kernel: ralink drivers 2.7.x.x: fix stop work after some clients reconnect or some call ap scan.<br>
+33) kernel: /lib/string and /lib/memcopy replace by glibc version (more fast).<br>
+34) kernel: tcp: place file operations directly into tcp_seq_afinfo.<br>
+35) kernel: tcp_cubic: fix the range of delayed_ack.<br>
+36) kernel: sched: Keep kthreads at default priority.<br>
+37) kernel: ipv6: fix IPV6_RECVERR handling of locally-generated errors.<br>
+38) kernel: ipv4: remove redundant verification code.<br>
+39) kernel: cifs: typo in earlier cifs_reconnect fix.<br>
+40) kernel: cifs: fix for incorrect session reconnects.<br>
+41) kernel: cifs: fix bad handling of EAGAIN error on kernel_recvmsg in cifs_demultiplex_thread.<br>
+42) kernel: ipc: sysvsem: refuse clone(CLONE_SYSVSEM|CLONE_NEWIPC).<br>
+43) kernel: ipc: sysvsem: force unshare(CLONE_SYSVSEM) when CLONE_NEWIPC.<br>
+44) kernel: ipc: sysvsem: implement sys_unshare(CLONE_SYSVSEM).<br>
+45) kernel: bridge: replace fdb hash to more fast function (~10% hash speed up).<br>
+46) kernel: ipmr: increase cache resolve queue len (prevent drop unresolved request).<br>
+47) kernel: usb serial: add some modems support.<br>
+48) kernel: mm: reduce atomic use on use_mm fast path.<br>
+49) kernel: 8021q: fix a potential memory leak.<br>
+50) kernel: ipv6: in case of link failure remove route directly instead of letting it expire.<br>
+51) kernel: ip6_pol_route panic: Do not allow VLAN on loopback.<br>
+52) kernel: tun: orphan an skb on tx.<br>
+53) kernel: option: add support RAS modem TE W120.<br>
+54) kernel: netfilter: ipv6: move xfrm_lookup at end of ip6_route_me_harder.<br>
+55) kernel: netfilter: disable xt_string and friends (not used, save flash free space).<br>
+56) kernel: pppol2tp: backport rebind tunnel support and some fixes.<br>
+57) kernel: pppol2tp: backport send/recv messages optimization.<br>
+58) kernel: ipv6: set defaults param as in ipv4 code.<br>
+59) kernel: igmp: fix the problem when mc leave group.<br>
+60) kernel: core: slight optimization of process backlog loop.<br>
+61) kernel: tcp: remove bad timeout logic in fast recovery.<br>
+62) kernel: ipv6: define constants for link-local multicast addresses.<br>
+63) kernel: ipv6: send ICMPv6 RSes only when RAs are accepted.<br>
+64) kernel: all archs: consolidate init and exit sections in vmlinux.lds.h.<br>
+65) kernel: add missing init section definitions.<br>
+
+<br>
+<b>4.10.x</b><br>
+1) build system: cleanup and tune build flags for more speed and safe codegeneration.<br>
+2) toolchain: move to 4.8.4 gcc svn version (after 4.8.3 release 4.8 tree apply only bugfixes).<br>
+3) toolchain: binutils: apply some upstream fixes.<br>
+4) init.d: use wins from uplink network if exist, and some optimize.<br>
+5) init.d: fix work crontab after login change.<br>
+6) init.d: after gen mac new mac write ti factory part to (more compat with others software and legacy sdk).<br>
+7) init.d: fs: add fs change_mac command for change/clone WAN mac adress.<br>
+8) init.d: udhcpc script: add support switch reinit on leasefail for devices with external rtl switch (example N56U).<br>
+9) init.d: try use original mac adresses for wan/lan if exist (now 3052 only).<br>
+10) init.d: rewrite reload services logic (more simple and more safe).<br>
+11) init.d: prevent loop if some ipv6 tunnels configured.<br>
+12) init.d: no need del address at zcip deconfig logic.<br>
+13) init.d: use sysctl in some cases instead of direct write to procfs.<br>
+14) webui: add enable/disable netfilter skip processing for filter established sessions and skip window check(netfilter fastpath mode).<br>
+15) webui/kext: rework offload engine and fastpath modes tune.<br>
+16) usb-modeswitch-data: up to 20140529.<br>
+17) pppd: version up to 2.4.7 (9 Aug 2014).<br>
+18) pppd: pppol2tp plugin: fix usage invalid handle.<br>
+19) openssl: version up to 0.9.8zb.<br>
+20) tools: fix eth_mac tool (manipulate mac in factory part, now tested only in 2.4Ghz 305x devices).<br>
+21) libcurl: up to 7.37.1 version.<br>
+22) uboot: up to 4.2.S.1 version.<br>
+23) dropbear: update to 2014.65.<br>
+24) dropbear: fix keepalive.<br>
+25) base_system: backports from new sdk for support MT7620 (process non end now).<br>
+26) dnsmasq: update to 2.72 version.<br>
+27) goahead: fix handle reset/wps buttons.<br>
+28) miniupnpd: up to 1.8.20140906 version.<br>
+29) system: replace ip tool from busybox to iproute2 version (need for 6rd tunnels based acess ipv6 support).<br>
+30) kernel: net/l2tp: don't fall back on UDP [get|set]sockopt.<br>
+31) kernel: net: igmp: reduce Unsolicited report interval to 1s when using IGMPv3.<br>
+32) kernel: net: replace continue with break to reduce unnecessary loop in xxx_xmarksources.<br>
+33) kernel: net: ipv6: igmp6_event_query: use msecs_to_jiffies.<br>
+34) kernel: net: potential null skb->dev dereference.<br>
+35) kernel: net: optimize non-gso test checks.<br>
+36) kernel: net: linkwatch: allow vlans to get carrier changes faster.<br>
+37) kernel: net: fix memory leak in the proto_register function.<br>
+38) kernel: net: sendmsg: fix NULL pointer dereference.<br>
+39) kernel: net: unix: inherit SOCK_PASS{CRED, SEC} flags from socket to fix race.<br>
+40) kernel: ipv4,ipv6: send igmpv3/mld packets with TC_PRIO_CONTROL.<br>
+41) kernel: ipv4: force_igmp_version ignored when a IGMPv3 query received.<br>
+42) kernel: ipv6: increase maximum lifetime of flow labels (RFC 3697).<br>
+43) kernel: ipv6: Check RA for sllao when configuring optimistic ipv6 address.<br>
+44) kernel: ipv6: enable RFC 4429 Optimistic DAD per default.<br>
+45) kernel: ipv6: prevent race between address creation and removal.<br>
+46) kernel: ipv6: fix preferred_lft not updating in some cases.<br>
+47) kernel: ipv6: don't accept multicast traffic with scope 0.<br>
+48) kernel: ipv6: udp: possible dst leak in udpv6_sendmsg.<br>
+49) kernel: ipv6: check the hop limit setting in ancillary data.<br>
+50) kernel: ipv6: remove optimistic DAD flag test in ipv6_add_addr() and enable by default.<br>
+51) kernel: ipv6: update Destination Cache entries when gateway turn into host(RFC 4861).<br>
+52) kernel: ipv6: fix dangling references on error in fib6_add().<br>
+53) kernel: ipv6: udp packets following an UFO enqueued packet need also be handled by UFO.<br>
+54) kernel: netfilter: improve ipv4 netfilter optimization pass default table.<br>
+55) kernel: netfilter: allow disabling processing of the netfilter "filter" table for established connection packets.<br>
+56) kernel: netfilter: don't use mutex_lock_interruptible().<br>
+57) kernel: igmp: call ip_mc_clear_src() only when we have no users of ip_mc_list.<br>
+58) kernel: ip_output: do skb ufo init for peeked non ufo skb as well.<br>
+59) kernel: option driver add new modems support (from 3.16 kernel).<br>
+60) kernel: ppp: refresh Ralink hardware watchdog timer, prevent reboot at high cpu load.<br>
+61) kernel: packet: add needed_tailroom to packet_sendmsg_spkt.<br>
+62) kernel: net_sched: qdisc_alloc_handle() can be too slow.<br>
+63) kernel: tcp: make sure write_queue_from does not begin with NULL ptr.<br>
+64) kernel: tcp: set initial_ssthresh default to zero in Cubic and BIC.<br>
+65) kernel: imq: automatic exclude redirected to imq traffic from PPE and FastNat.<br>
+66) kernel: sched: decrease user max rt_prio to 10, this reducing the size of the O(1) scheduler arrays (small save ticks).<br>
+67) kernel: hw_nat: small optimize, fix need drop magic tag and mark unhit in ip6 local output.<br>
+68) kernel: hw_nat: conntrack: correct skip v6 packets in conntrack_in (for hw_nat v2).<br>
+69) kernel: raeth: implement ondemand wan status check for devices with external rtl switch (example N56U).<br>
+70) kernel: wifi drivers: fix RTPRIV_IOCTL_GET_MAC_TABLE_STRUCT on RTxxxX driver 2.5.X.X.<br>
+71) kernel: ralink_spi: if flash not detected use stub depended from kernel config (4/8/16Mb select).<br>
+72) kernel: hw_nat: update code and dependecys(need for MT7620 support).<br>
+73) kernel: hw_nat: use global spinlock for serializing access to FoE DMA, extend module params.<br>
+74) kernel: speedhack: review section arrange and add some time critical code to fastpath section(up l2tp speed from ~130FDX to ~150FDX).<br>
+75) kernel: rewrite min3, max3 and clamp using min and max.<br>
+76) kernel: fix check and set ignore dont fragment flag in some cases.<br>
+77) kernel: spi_driver: add support MT762x support.<br>
+78) kernel: net_sched: avoid generating same handle for u32 filters.<br>
+79) kernel: inet: fix possible memory corruption with UDP_CORK and UFO.<br>
+80) kernel: ip: fix possible crashes in ip*_cork_release().<br>
+
+<br>
+<b>4.11.x</b><br>
+1) transmission: disable ipv6 by default (avoid kernel panic on some installations).<br>
+2) usb: fix double modem init.<br>
+3) goahead: cleanup and small fixes.<br>
+4) goahead: add change wan mac in webUI.<br>
+5) goahead: fix regression crash at short reset press.<br>
+6) goahead: rearrange services in misc pages for more usefull.<br>
+7) openssl up to 0.9.8zc version.<br>
+8) toolchain: move to 4.8.4 gcc svn version (after 4.8.3 release 4.8 tree apply only bugfixes).<br>
+9) apps: port wive-dhcpv6 (need write client logic, server logic work good).<br>
+10) miniupnpd: up to version 1.9.20141108.<br>
+11) busybox: apply lzop and zcat upstream patchs.<br>
+12) busybox: udhcpc: allow unicast RENEW for lease time from 60s, allow first unicast RENEW on force renew performed (fix short leases under ISP with DHCP snooping).<br>
+13) pppd: cap MTU to the user configured value.<br>
+14) init.d: fix get vendid at new mac generate.<br>
+15) init.d: add check first octet in mac readed from old factory for prevent read from crashed mtd FF.<br>
+16) init.d: rewrite logic for ipv6 suppor (need write logic for more modes support).<br>
+17) init.d: radvd,dhcpv6: read dns server from uplink if recived.<br>
+18) init.d: enable multicast2unicast in wifi drivers only if igmpproxy enabled.<br>
+19) init.d: move dhcpv6 client start to wan config.<br>
+20) init.d: reconfigure ipv6 after recive params from ISP.<br>
+21) init.d: use ISP DNS ipv6 servers for local resolv if recived.<br>
+22) init.d: ipv6: need check ipv4 adress on wan only in tunneling modes.<br>
+23) init.d: fix pcp/nat-pmp control port accept from lan.<br>
+24) init.d: add static routes for all resolved vpn server adresses.<br>
+25) init.d: remove web_wait logic, not more need and unused some time.<br>
+26) init.d: vpnhelper: direct set iface name in static routes to vpn servers.<br>
+27) init.d: optimize get parametrs from nvram (more variable always avail by call global script).<br>
+28) init.d: always tune wifi after ifacse up.<br>
+29) init.d: tune parametrs for apcli to.<br>
+30) init.d: do not use goahead.pid as boot complete flag, use /tmp/goodboot instead (more independed from goahead logic).<br>
+31) init.d: in ap/apcli bridge mode enable Multicast2Unicast independed Igmpproxy enabled.<br>
+32) init.d: optimize and small fix switch and offload configure.<br>
+33) init.d: add shortname for LAN (need to lldpd daemon for hostname resolutions).<br>
+34) goahead: fix swith from/to apcli with apcli bridge only modes.<br>
+35) goahead: add base webUI for ipv6 configure (need write logic for more modes support).<br>
+36) goahead: add dhcpv6 server control in misc.<br>
+37) goahead: fix add portforward rules (syntax compat with new iptables fix, actual for MT tree).<br>
+38) goahead: remove double restart ripd/zebra.<br>
+39) goahead: remove dead mesh support.<br>
+40) goahead: fix print error messages at update fw/restore settings/load rwfs.<br>
+41) goahead: read lan/wan ifnames from /tmp/*an_if_name exported by init.d in global script.<br>
+42) goahead: fix get mode vpn.<br>
+43) goahead: add show real ip adress vpn/wan in status page.<br>
+44) goahead: use mtd_write erase RW-FS instead of direct crash rwfs.<br>
+45) kernel: hw_nat: update to 2.51 version.<br>
+46) kernel: spi: add more flash support.<br>
+47) kernel: ipv6: fix tcp_v6_send_response(): it didn't set skb transport header.<br>
+48) kernel: ipv6: go not warn for informational ICMP messages, regardless of type.<br>
+49) kernel: ipv6: reimplement add LL routes.<br>
+50) kernel: ralink_spi: de-assert CS before change SPIENMODE to HW control.<br>
+51) kernel: ralink_wifi: allways init auto fallback for all chips.<br>
+52) kernel: ralink wifi: prevent skb double free in igmp_snoop processiong.<br>
+53) kernel: ralink wifi: rx/tx optimization (remove stupid wrappers in time critical code).<br>
+54) kernel: ralink wifi: update eeprom in drivers by fabric.<br>
+55) kernel: ralink wifi: add lost mtk patches.<br>
+56) kernel: ralink wifi: implement txring fast free hack for all drivers.<br>
+57) kernel: ralink wifi: decrease life check packets max count, decrease life time and check entry interval for more speed cleanup died clients.<br>
+58) kernel: ralink wifi: decrease tx ring size (set 64 instead of 128).<br>
+59) kernel: ralink wifi: add lost increment retry count in jam traffic detect path.<br>
+60) kernel: ralink wifi: v2.5: decrease BASize for 2T2R Atheros clients (improve throughput and fix packets lost on some clients).<br>
+61) kernel: ralink wifi: v2.5: set MpduDensity = 7 for Atheros clients (improve throughput and fix packets lost on some clients).<br>
+62) kernel: ralink wifi: fix tx ring full issue at M2U enabled.<br>
+63) kernel: ralink wifi: fix m2u filter tabel. Add MDNS and fix IgmpV3 filter.<br>
+64) kernel: l2tp: fix race while getting PMTU on PPP pseudo-wire.<br>
+65) kernel: hw_nat: show destination port on PpeHitBindForceToCpuHandler failed.<br>
+66) kernel: net: optimise inet_proto_csum_replace4() and inet_proto_csum_replace4.<br>
+67) kernel: jiffies: fix timeval conversion to jiffies.<br>
+68) kernel: mips: O32/32-bit: Fix bug which can cause incorrect system call restarts.<br>
+69) kernel: small tune refcnt hack.<br>
+70) kernel: ipv4: fix nexthop attlen check in fib_nh_match.<br>
+71) kernel: hw_nat: spin_(un)lock must be Bottom Halve (prevent deadlock).<br>
+72) kernel: fastroute: increase CB offcet (found used offset 41 in wifi drivers).<br>
+73) kernel: kernel: fix misuses of f_count() in ppp.<br>
+74) kernel: bridge: disable igmp no flooding logic (not more need after bf_fastpath remove).<br>
+
+<br>
+<b>5.0.x</b><br>
+1) toolchain: update kernel headers and gcc up to 4.8.4 release.<br>
+2) build_system: use no reorder block gcc flag for build with optimize for size.<br>
+3) uboot: update to last version.<br>
+4) libevent: up to 2.0.22 version.<br>
+5) openssl up to 0.9.8ze version.<br>
+6) busybox: update to 1.23.0 version.<br>
+7) busybox: sync with upstream (busybox-1.23.0-ash.patch, busybox-1.23.0-modprobe.patch, busybox-1.23.0-vi.patch).<br>
+8) busybox: downgrade zcip code to 1.22.x version(easy fix new gcc issue, need rewrite later).<br>
+9) busybox: fix create char device /dev/mtdX as block device (child for /dev/mtdblockX).<br>
+10) reg tool: small fixup.<br>
+11) mii tool: fixup and add 7628 support.<br>
+12) gpio tool: fix 9532 mode support.<br>
+13) nvram lib: do not direct read from flash at show.<br>
+14) nvram tool: fix generate wifi config.<br>
+15) goahead: cleanup dead code and fix debug.<br>
+16) goahead: fix redirect submit-url issue (may be crash or not correct redirects).<br>
+17) goahead: boost ipaddress buffer size.<br>
+18) goahead: tune default parametrs (increase preallocated bufferss and others).<br>
+19) goahead: fix infinitive loop with high cpu usage in websGetInput.<br>
+20) goahead: fix potentional security issue (extend path check in url req handler).<br>
+21) goahead: fix info leak in socket reuse code.<br>
+22) goahead: limit request ring length.<br>
+23) goahead: fix return web error code in some case.<br>
+24) igmpproxy: fix init mrDesc.<br>
+25) xl2tpd: up to Nov 26, 2014 git version.<br>
+26) miniupnpd: up to 1.9.20141209 version.<br>
+27) uClibc: resolv more compliant with RFC1034.<br>
+28) pppd: fix segfault pppol2tp plugin on IPv6 disabled (broken L2TP).<br>
+29) xupnpd: update to 404r.<br>
+30) xupnpd: lua: update to 5.3.0 version.<br>
+31) igmpproxy: optimize retry timeouts.<br>
+32) dropbear: up to 2015.67 version.<br>
+33) kernel/configs: full disable vlan offload support for 3x5x (not correct work and not used long time).<br>
+34) kernel: ralink_wifi: update to 2.7.2.0/2.6.2.0 (20140820) AP/STA drivers.<br>
+35) kernel: ralink_wifi: backport ApCliRcvBeaconTime fix from 3.x.x.x driver.<br>
+36) kernel: ralink_wifi: use 64 bit traffic counters.<br>
+37) kernel: mips: Properly align the .data..init_task section.<br>
+38) kernel: irq: disallow commit to random entropy pool from every irq(decrease latency).<br>
+39) kernel: ralink_spi: add N25Q256A and MT25QL512AB support.<br>
+40) kernel: netfilter: nf_conntrack: allow server to become a client in TW handling.<br>
+41) kernel: net: rearrange loop in net_rx_action.<br>
+
+<br>
+<b>5.1.x</b><br>
+1) toolchain: sync uclibc patches, update gcc to 09.05.2015 4.8.5 version form git, update headers.<br>
+2) build_system: fix build libc headers (use -isystem instead of -I for correct dependency).<br>
+3) uboot: update to 4.3.2.0 version.
+4) ethtool: disable build vendors extensions (decrease size).<br>
+5) ethtool: up to 3.18 version.<br>
+6) quagga: up to 0.99.24.1 version.<br>
+7) usb-modeswitch-data: up to up to 20150115.<br>
+8) miniupnpd: up to 1.9.20150307 version.<br>
+9) busybox: apply busybox-1.23.1-wget.patch.<br>
+10) openssl up to 0.9.8zf version.<br>
+11) dnsmasq: up to 2.73rc7.<br>
+12) miniupnpd: up to 1.9.20150430 version.<br>
+13) goahead: fix error messages at call external scripts in some case.<br>
+14) goahead: fix upload firmware error handling.<br>
+15) goahead: fix lang select race in some situations.<br>
+16) init.d: fix logging if syslog disabled.<br>
+17) udhcpc: fix static routes apply in some cases.<br>
+18) dhcpv6: fix renewal of IA NA.<br>
+19) dhcpv6: close file descriptors on exec.<br>
+20) dhcpv6: try and generate a default IFID only if an IFID is not configured.<br>
+21) dhcpv6: ignore advertise messages with none of requested data and missed status codes.<br>
+22) dhcpv6: do not open a routing socket that's never used.<br>
+23) dhcpv6: more compath with new uclibc/glibc.<br>
+24) xupnpd: switch to 5.1.x lua use (fix compat with last portable upnpd sdk with bug utf locale parse).<br>
+25) xupnpd: use mpeg as default mime type (more devices compat whith this type).<br>
+26) xupnpd: implement base profile for Panasonic Viera(need manual default mime set to mpeg_ts now).<br>
+27) xupnpd: auto use udpxy if enabled.<br>
+28) pppd: do not build ipx support if not enabled in kernel.<br>
+29) kernel: ralink_wifi fix build correct without DBG defined.<br>
+30) kernel: ralink_wifi: desintegrate AP_QLOAD and chanbusytime in ap_autoChSel.<br>
+31) kernel: ralink_wifi: disable 40MHz intolerant support if DRAFT3 undefined.<br>
+32) kernel: net: reject creation of netdev names with colons.<br>
+33) kernel: fastpaths: clear in ip_input CB only for loopback packets.<br>
+34) kernel: mips: iomap: use __mem_{read,write}{b,w,l} for MMIO.<br>
+35) kernel: pppoe: lacks DST MAC address check.<br>
+36) kernel: ppp: unset skb checksum complete in ppp_receive_frame.<br>
+37) kernel: nvram: fix check part size in commit.<br>
+<br>
+<br>
+<br>

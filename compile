@@ -1,0 +1,155 @@
+#!/bin/sh
+
+DOS2UNIX=NO
+FULLREBUILD=NO
+VERSIONPKG="5.1.10.RU.`date +%d%m%Y`"
+
+#---Set_env_ROOTDIR_to_current_dir---#
+ROOTDIR=`pwd`
+export ROOTDIR=$ROOTDIR
+export FIRMROOT=$ROOTDIR
+export LINUXDIR=$ROOTDIR/linux
+
+#-------Set_env_LANG------#
+export LANG=en_US
+export LC_ALL=POSIX
+
+#----WR-150N---WR-300N----#
+if [ "$1" = "" ]; then
+    #MODE=RT3052-2T2R
+    #MODE=RT3052-2T2R-USB
+    #MODE=RT3352-2T2R-USB
+    MODE=RT3662-2T2R-5G-USB
+    #MODE=RT5350-1T1R
+    #MODE=RT3350-1T1R
+    #MODE=RT3050-1T1R
+else
+    MODE=$1
+fi
+
+#------------------------------------#
+#WR-N for full and WR-NL for ligth HW
+if [ "$MODE" = "RT3662-2T2R-5G-USB" ]; then
+    DEVNAME="Wive_WR-300NU"
+elif [ "$MODE" = "RT3052-2T2R-USB" ]; then
+    DEVNAME="Wive_WR-300NU"
+elif [ "$MODE" = "RT3352-2T2R-USB" ]; then
+    DEVNAME="Wive_WR-300NU"
+elif [ "$MODE" = "RT3052-2T2R" ]; then
+    DEVNAME="Wive_WR-300N"
+elif [ "$MODE" = "RT5350-1T1R" ]; then
+    DEVNAME="Wive_WR-150N"
+elif [ "$MODE" = "RT3350-1T1R" ]; then
+    DEVNAME="Wive_WR-150N"
+elif [ "$MODE" = "RT3050-1T1R" ]; then
+    DEVNAME="Wive_WR-150N"
+else
+    echo "Not supported (unknown) mode."
+    exit 1
+fi
+
+#use for product id and model name
+export PRODUCTID="$DEVNAME"
+export MODEL_NAME="$DEVNAME"
+export KERNEL_VER="$VERSIONPKG"
+
+echo "_________________________________________________________"
+echo "> Building for $PRODUCTID version $KERNEL_VER <"
+echo "_________________________________________________________"
+
+
+echo ""								>  $ROOTDIR/sdk_version.h
+echo "#define RT288X_SDK_VERSION \"$DEVNAME-$VERSIONPKG\""	>> $ROOTDIR/sdk_version.h
+echo "#define DEVNAME  \"$DEVNAME\""				>> $ROOTDIR/sdk_version.h
+echo "#define VERSIONPKG  \"$VERSIONPKG\""			>> $ROOTDIR/sdk_version.h
+echo "#define VERSIONSTR \"$DEVNAME-$VERSIONPKG\""		>> $ROOTDIR/sdk_version.h
+echo ""								>> $ROOTDIR/sdk_version.h
+echo ""								>  $ROOTDIR/version
+echo "RT288X_SDK_VERSION = \"$VERSIONPKG\""			>> $ROOTDIR/version
+echo "DEVNAME = \"$DEVNAME\""					>> $ROOTDIR/version
+echo "VERSIONPKG = \"$VERSIONPKG\""				>> $ROOTDIR/version
+echo "VERSIONSTR = \"$DEVNAME-$VERSIONPKG\""			>> $ROOTDIR/version
+echo ""								>> $ROOTDIR/version
+
+#for clear all binary
+if [ "$FULLREBUILD" = "YES" ] ; then
+echo -------------------------------FULL-CLEAR-------------------------------
+    ./clear
+fi
+
+rm -rfv $ROOTDIR/romfs/*
+rm -rfv $ROOTDIR/images/*
+ln -sf  $ROOTDIR/linux-2.6.21.x $ROOTDIR/linux
+
+echo --------------------------------COPY-CONFIG-----------------------------
+##############################FOR-ALL-DEVICES#########################
+cp -fv $ROOTDIR/configs/all/config-all		$ROOTDIR/.config
+#######################################################################
+ln -fs $ROOTDIR/vendors/Ralink/RT3052/config.arch config.arch
+ln -fs $ROOTDIR/config/autoconf.h		$ROOTDIR/autoconf.h
+#######################################################################
+
+#################################PER-DEVICES###########################
+if [ "$MODE" = "RT3050-1T1R" ] ; then
+    cp -fv $ROOTDIR/configs/kernel/config-kernel-RT3050-1T1R		$ROOTDIR/linux/.config
+    cp -fv $ROOTDIR/configs/all/config-config-4M			$ROOTDIR/config/.config
+    cp -fv $ROOTDIR/configs/all/config-busybox-4M			$ROOTDIR/user/busybox/.config
+    cp -fv $ROOTDIR/configs/all/config-lib				$ROOTDIR/lib/.config
+elif [ "$MODE" = "RT3350-1T1R" ] ; then
+    cp -fv $ROOTDIR/configs/kernel/config-kernel-RT3350-1T1R		$ROOTDIR/linux/.config
+    cp -fv $ROOTDIR/configs/all/config-config-4M			$ROOTDIR/config/.config
+    cp -fv $ROOTDIR/configs/all/config-busybox-4M			$ROOTDIR/user/busybox/.config
+    cp -fv $ROOTDIR/configs/all/config-lib				$ROOTDIR/lib/.config
+elif [ "$MODE" = "RT5350-1T1R" ] ; then
+    cp -fv $ROOTDIR/configs/kernel/config-kernel-RT5350-1T1R		$ROOTDIR/linux/.config
+    cp -fv $ROOTDIR/configs/all/config-config-4M			$ROOTDIR/config/.config
+    cp -fv $ROOTDIR/configs/all/config-busybox-4M			$ROOTDIR/user/busybox/.config
+    cp -fv $ROOTDIR/configs/all/config-lib				$ROOTDIR/lib/.config
+elif [ "$MODE" = "RT3052-2T2R" ] ; then
+    cp -fv $ROOTDIR/configs/kernel/config-kernel-RT3052-2T2R		$ROOTDIR/linux/.config
+    cp -fv $ROOTDIR/configs/all/config-busybox-4M			$ROOTDIR/user/busybox/.config
+    cp -fv $ROOTDIR/configs/all/config-config-4M			$ROOTDIR/config/.config
+    cp -fv $ROOTDIR/configs/all/config-lib				$ROOTDIR/lib/.config
+elif [ "$MODE" = "RT3052-2T2R-USB" ] ; then
+    cp -fv $ROOTDIR/configs/kernel/config-kernel-RT3052-2T2R-USB-8M	$ROOTDIR/linux/.config
+    cp -fv $ROOTDIR/configs/all/config-busybox-USB-8M			$ROOTDIR/user/busybox/.config
+    cp -fv $ROOTDIR/configs/all/config-config-USB-8M			$ROOTDIR/config/.config
+    cp -fv $ROOTDIR/configs/all/config-lib				$ROOTDIR/lib/.config
+elif [ "$MODE" = "RT3352-2T2R-USB" ] ; then
+    cp -fv $ROOTDIR/configs/kernel/config-kernel-RT3352-2T2R-USB-8M	$ROOTDIR/linux/.config
+    cp -fv $ROOTDIR/configs/all/config-busybox-USB-8M			$ROOTDIR/user/busybox/.config
+    cp -fv $ROOTDIR/configs/all/config-config-USB-8M			$ROOTDIR/config/.config
+    cp -fv $ROOTDIR/configs/all/config-lib				$ROOTDIR/lib/.config
+elif [ "$MODE" = "RT3662-2T2R-5G-USB" ] ; then
+    cp -fv $ROOTDIR/configs/kernel/config-kernel-RT3662-2T2R-5G-USB-8M	$ROOTDIR/linux/.config
+    cp -fv $ROOTDIR/configs/all/config-busybox-USB-8M			$ROOTDIR/user/busybox/.config
+    cp -fv $ROOTDIR/configs/all/config-config-5G-USB-8M			$ROOTDIR/config/.config
+    cp -fv $ROOTDIR/configs/all/config-lib				$ROOTDIR/lib/.config
+else
+    echo "Config files not found."
+    exit 1
+fi
+
+#for wantusoid`s like.
+if [ "$DOS2UNIX" = "YES" ] ; then
+echo ---------------------------------DOS2UNIX--------------------------------
+    find -type f -exec dos2unix {} \;
+fi
+
+echo -------------------------------MAKE-OLDCONFIGS---------------------------
+make oldconfig
+make dep
+
+echo ---------------------------------MAKE-ALL--------------------------------
+make
+
+if [ -f Uboot/uboot.bin ] && [ -f images/zImage.lzma ] ; then
+echo -------------------------------MAKE-FULLDUMP-----------------------------
+    make -C fulldump
+fi
+
+echo -----------------------------------PACK----------------------------------
+mv -f images/*.bin "images/$DEVNAME-$MODE.$VERSIONPKG.bin"
+zip -r images/$DEVNAME-$MODE.$VERSIONPKG.bin.zip images/*.bin
+
+echo ---------------------------------END BUILD-------------------------------

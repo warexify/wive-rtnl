@@ -1,0 +1,57 @@
+#!/bin/sh
+
+LOG="logger -t goahead"
+
+start() {
+ $LOG "Start goahead"
+    #set bootcomplite flag
+    touch /tmp/bootgood
+
+    #blink wps/sec led at boot time before goahead start
+    if [ -f /bin/gpio ]; then
+	boot_leds_blink=`nvram_get 2860 boot_leds_blink`
+	for i in $boot_leds_blink; do
+	    gpio l $i 0 4000 0 0 0
+	done
+    fi
+    if [ -f /bin/goahead ]; then
+	# start daemon
+	goahead &
+    else
+	# asinc blink wps/sec led
+	# if goahead not found
+	if [ -f /bin/gpio ]; then
+	    gpio l 13 10 1 0 0 4000
+	    gpio l 14 1 10 0 0 4000
+	fi
+	echo "GOAHEAD NOT FOUND!!! FIX THIS AND REBUILD FIRMWARE."
+	exit 1
+    fi
+}
+
+stop() {
+    if [ -f /var/run/goahead.pid ]; then
+	$LOG "Stop goahead"
+	killall -q goahead
+	killall -q -SIGKILL goahead
+    fi
+}
+
+case "$1" in
+	start)
+	    start
+	    ;;
+
+	stop)
+	    stop
+	    ;;
+
+	restart)
+	    stop
+	    start
+	    ;;
+
+	*)
+	    echo $"Usage: $0 {start|stop|restart}"
+	    exit 1
+esac

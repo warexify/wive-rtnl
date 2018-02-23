@@ -1,0 +1,5 @@
+*.so
+*.so.dbg
+*.[oa]
+*.dep
+filesystem

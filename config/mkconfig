@@ -1,0 +1,66 @@
+#! /bin/sh
+#############################################################################
+#
+# Generate the vendor/product menu entries for the top level config
+#
+# davidm@snapgear.com
+#
+#############################################################################
+
+fix_name()
+{
+	echo $1 | tr '[\-\.\/\+a-z]' '[____A-Z]'
+}
+
+#############################################################################
+#
+# the header of the config
+#
+
+echo "mainmenu_name 'Wive-NG Embedded Linux Configuration'"
+
+#############################################################################
+#
+# Figure out the vendor/products dynamically, allows people to add there
+# own without messin with the config.in file
+#
+
+echo "mainmenu_option next_comment"
+echo "comment 'Select the Product you wish to target'"
+echo "choice 'Ralink Products' \"RT3052 CONFIG_DEFAULTS_RALINK_RT3052\\"
+echo "                         \""
+echo "choice   'Flash/SDRAM Size'\\"
+echo "         \"4M/32M(AP+STA)		  CONFIG_DEFSETTING_4M32M\\"
+echo "           8M/32M(AP+STA+NAS)       CONFIG_DEFSETTING_8M32M "
+echo "	  	\""
+echo "endmenu"
+echo "define_string CONFIG_VENDOR \"Ralink\""
+echo "mainmenu_option next_comment"
+echo "comment 'Kernel/Library/Defaults Selection'"
+echo "define_bool CONFIG_DEFAULTS_KERNEL_2_6_21 y"
+
+#############################################################################
+#
+# the rest of the config
+#
+
+# echo "mainmenu_option next_comment"
+# echo "comment 'Configuration Overrides'"
+
+cat <<!EOF
+string 'Cross Compiler Path' 			CONFIG_CROSS_COMPILER_PATH `pwd`/toolchain/bin
+comment ' '
+bool 'Default all settings (lose changes)'	CONFIG_DEFAULTS_OVERRIDE
+bool 'Customize Kernel Settings'		CONFIG_DEFAULTS_KERNEL
+!EOF
+[ -d modules ] &&
+	echo "bool 'Customize Module Settings'	CONFIG_DEFAULTS_MODULES"
+cat <<!EOF
+bool 'Customize Vendor/User Settings'		CONFIG_DEFAULTS_VENDOR
+bool 'Customize Busybox Settings'               CONFIG_DEFAULTS_BUSYBOX
+bool 'Customize uClibc Settings'                CONFIG_DEFAULTS_UCLIBC
+bool 'Update Default Vendor Settings'		CONFIG_DEFAULTS_VENDOR_UPDATE
+endmenu
+!EOF
+
+############################################################################

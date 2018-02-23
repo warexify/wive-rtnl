@@ -1,0 +1,185 @@
+#!/bin/sh
+
+# get params
+. /etc/scripts/global.sh
+
+LOG="logger -t kext"
+
+start() {
+    nat_mode
+    offload
+    pthrough
+    # This is set only if wan or lan in bridge
+    if [ "$wan_if" = "br0" ] || [ "$lan_if" = "br0" ]; then
+	bridge_stp
+    fi
+}
+
+nat_mode() {
+    eval `nvram_buf_get 2860 nat_mode`
+    if [ "$nat_mode" = "1" ]; then
+	sysctl -wq net.nf_conntrack_nat_mode=1
+	$LOG "Nat mode Full Cone"
+    elif [ "$nat_mode" = "2" ]; then
+	sysctl -wq net.nf_conntrack_nat_mode=2
+	$LOG "Nat mode Restricted Cone"
+    else
+	sysctl -wq net.nf_conntrack_nat_mode=0
+	$LOG "Nat mode Linux Hybrid"
+    fi
+}
+
+offload() {
+    # In bridge and chillispot mode not fastnat use
+    if [ "$OperationMode" != "0" ] && [ "$OperationMode" != "4" ] && [ "$ApCliBridgeOnly" != "1" ]; then
+	eval `nvram_buf_get 2860 hw_nat_bind hw_nat_wifi hw_nat_udp offloadMode natFastpath routeFastpath filterFastpath`
+	# select NAT offload mode
+	if [ "$offloadMode" = "1" ]; then
+	    hw_nat=0
+	    sw_nat=1
+	    $LOG "NAT Offload mode software with selected fastpaths, hw_nat disabled."
+	elif [ "$offloadMode" = "2" ]; then
+	    hw_nat=1
+	    sw_nat=0
+	    $LOG "NAT Offload mode hardware, all fastpaths disabled."
+	elif [ "$offloadMode" = "3" ]; then
+	    hw_nat=1
+	    sw_nat=1
+	    $LOG "NAT Offload mode complex, enable hw_nat and selected software fastpaths."
+	else
+	    hw_nat=0
+	    sw_nat=0
+	    $LOG "NAT Offload disabled by user, hw_nat and all fastpaths disabled."
+	fi
+	# exception for disabe hw_nat
+	if [ "$CONFIG_RALINK_RT5350" = "y" ]; then
+	    hw_nat=0
+	    $LOG "HW_NAT DISABLED: THIS SOC NOT SUPPORT PPE!!!"
+	fi
+	# configure software nat offload
+	if [ "$natFastpath" != "0" ] && [ "$sw_nat" = "1" ]; then
+	    $LOG "NAT fastpath enabled."
+	    sysctl -wq net.nf_conntrack_fastnat=1
+	else
+	    sysctl -wq net.nf_conntrack_fastnat=0
+	fi
+	# configure software route offload
+	if [ "$routeFastpath" != "0" ] && [ "$sw_nat" = "1" ]; then
+	    $LOG "Route fastpath enabled."
+	    sysctl -wq net.nf_conntrack_fastroute=1
+	else
+	    sysctl -wq net.nf_conntrack_fastroute=0
+	fi
+	# configure software netfilter offload
+	if [ "$filterFastpath" != "0" ] && [ "$sw_nat" = "1" ]; then
+	    $LOG "Netfilter fastpath enabled."
+	    sysctl -wq net.netfilter.nf_conntrack_tcp_no_window_check=1
+	    sysctl -wq net.netfilter.nf_conntrack_skip_established=1
+	else
+	    sysctl -wq net.netfilter.nf_conntrack_tcp_no_window_check=0
+	    sysctl -wq net.netfilter.nf_conntrack_skip_established=0
+	fi
+	# configure hardware nat offload
+	if [ "$hw_nat" = "1" ]; then
+	    if [ -d /sys/module/hw_nat ]; then
+		rmmod hw_nat > /dev/null 2>&1
+	    fi
+	    if [ "$hw_nat_wifi" = "1" ]; then
+	        hw_nat_wifi="wifi_offload=1"
+	        $LOG "hw_nat: wifi offload support enabled."
+	    else
+	        hw_nat_wifi="wifi_offload=0"
+	        $LOG "hw_nat: wifi offload support disabled."
+	    fi
+	    if [ "$hw_nat_udp" = "1" ]; then
+	        hw_nat_udp="udp_offload=1"
+	        $LOG "hw_nat: udp offload support enabled."
+	    else
+	        hw_nat_udp="udp_offload=0"
+	        $LOG "hw_nat: udp offload support disabled."
+	    fi
+	    modprobe -q hw_nat "$hw_nat_wifi" "$hw_nat_udp"
+	    $LOG "hw_nat: set default QOS Mode to WRR policy."
+	    hw_nat -L 0
+	    if [ "$hw_nat_bind" != "" ]; then
+	        $LOG "hw_nat: set binding threshold to $hw_nat_bind."
+	        hw_nat -N $hw_nat_bind > /dev/null 2>&1
+	    fi
+	else
+	    if [ -d /sys/module/hw_nat ]; then
+		rmmod hw_nat > /dev/null 2>&1
+	    fi
+	fi
+    else
+	$LOG "NAT Offload mode not supported in this device mode (bridge/apclibridge/etc), hw_nat and all fastpaths disabled."
+	sysctl -wq net.nf_conntrack_fastnat=0
+	sysctl -wq net.nf_conntrack_fastroute=0
+	sysctl -wq net.netfilter.nf_conntrack_skip_established=0
+	if [ -d /sys/module/hw_nat ]; then
+	    rmmod hw_nat > /dev/null 2>&1
+	fi
+    fi
+}
+
+pthrough() {
+    # In bridge and chillispot mode not passth use
+    if [ "$OperationMode" != "0" ] && [ "$OperationMode" != "4" ] && [ "$ApCliBridgeOnly" != "1" ]; then
+	eval `nvram_buf_get 2860 pppoe_pass ipv6_pass`
+	# pppoe and ip_v6 kernel mode relay.
+	if [ -d /proc/pthrough ]; then
+	    if [ "$pppoe_pass" = "1" ]; then
+		$LOG "PPPOE Pass Through enable for $lan_if and $wan_if interfaces."
+		echo "$lan_if,$wan_if" > /proc/pthrough/pppoe
+	    else
+		echo "null,null" > /proc/pthrough/pppoe
+	    fi
+	    if [ "$ipv6_pass" = "1" ]; then
+		$LOG "IPv6 Pass Through enable for $lan_if and $wan_if interfaces."
+		echo "$lan_if,$wan_if" > /proc/pthrough/ipv6
+	    else
+		echo "null,null" > /proc/pthrough/ipv6
+	    fi
+	fi
+    else
+	if [ -d /proc/pthrough ]; then
+	    echo "null,null" > /proc/pthrough/pppoe
+	    echo "null,null" > /proc/pthrough/ipv6
+	fi
+    fi
+}
+
+bridge_stp() {
+    #----Bridge STP----------------------------------------------
+    stpEnabled=`nvram_get 2860 stpEnabled`
+    if [ "$stpEnabled" = "1" ]; then
+	$LOG "Bridge STP enabled."
+	brctl setfd br0 15
+	brctl stp br0 1
+    else
+	brctl setfd br0 1
+	brctl stp br0 0
+    fi
+}
+
+stop() {
+    :
+}
+
+case "$1" in
+	start)
+	    start
+	    ;;
+
+	stop)
+	    stop
+	    ;;
+
+	restart)
+	    stop
+	    start
+	    ;;
+
+	*)
+	    echo $"Usage: $0 {start|stop|restart}"
+	    exit 1
+esac
